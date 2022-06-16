@@ -1,0 +1,65 @@
+cabal-version:       3.0
+name:                brainfuck
+version:             0.0.0.0
+synopsis:            See README for more info
+description:
+    See README for more info.
+    See README.md for more details.
+license:             MIT
+license-file:        LICENSE
+author:              Patraphong Sukhonpitumart
+maintainer:          Patraphong Sukhonpitumart <tenniscp25@gmail.com>
+copyright:           2022 Patraphong Sukhonpitumart
+build-type:          Simple
+extra-doc-files:     README.md
+                     CHANGELOG.md
+tested-with:         GHC == 8.10.7
+                     GHC == 9.0.2
+
+common common-options
+  build-depends:       base >= 4.14.3.0 && < 4.16
+                     , relude
+
+  mixins:              base hiding (Prelude)
+                     , relude ( Relude as Prelude
+                              , Relude.Unsafe
+                              )
+
+  ghc-options:         -Wall
+                       -Wcompat
+                       -Widentities
+                       -Wincomplete-uni-patterns
+                       -Wincomplete-record-updates
+                       -Wredundant-constraints
+                       -Wnoncanonical-monad-instances
+  if impl(ghc >= 8.2)
+    ghc-options:       -fhide-source-paths
+  if impl(ghc >= 8.4)
+    ghc-options:       -Wmissing-export-lists
+                       -Wpartial-fields
+  if impl(ghc >= 8.8)
+    ghc-options:       -Wmissing-deriving-strategies
+                       -fwrite-ide-info
+                       -hiedir=.hie
+  if impl(ghc >= 8.10)
+    ghc-options:       -Wunused-packages
+
+  default-language:    Haskell2010
+
+library
+  import:              common-options
+  hs-source-dirs:      src
+  exposed-modules:     Brainfuck
+                       Types
+  build-depends:       mtl
+                     , lens
+                     , megaparsec
+
+executable brainfuck
+  import:              common-options
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  build-depends:       brainfuck
+  ghc-options:         -threaded
+                       -rtsopts
+                       -with-rtsopts=-N
